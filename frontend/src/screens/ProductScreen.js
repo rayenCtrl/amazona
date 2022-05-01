@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useContext, useEffect, useReducer } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import {
@@ -15,6 +15,7 @@ import { Helmet } from 'react-helmet-async'
 import MessageBox from '../components/MessageBox'
 import LoadingBox from '../components/LoadingBox'
 import { getError } from '../utils'
+import { Store } from '../Store'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -43,7 +44,7 @@ const ProductScreen = () => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' })
       try {
-        const result = await axios.get(`/api/products/${slug}`)
+        const result = await axios.get(`/api/products/slug/${slug}`)
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data })
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) })
@@ -51,6 +52,11 @@ const ProductScreen = () => {
     }
     fetchData()
   }, [slug])
+
+  const { state, dispatch: ctxDispatch } = useContext(Store)
+  const addToCartHandler = () => {
+    ctxDispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity: 1 } })
+  }
 
   return loading ? (
     <LoadingBox />
@@ -60,7 +66,11 @@ const ProductScreen = () => {
     <div>
       <Row>
         <Col md={6}>
-          <img className='img-large' src={product.image} alt={product.name} />
+          <img
+            className='img-large'
+            src={product.image}
+            alt={product.name}
+          ></img>
         </Col>
         <Col md={3}>
           <ListGroup variant='flush'>
@@ -75,7 +85,7 @@ const ProductScreen = () => {
                 numReviews={product.numReviews}
               ></Rating>
             </ListGroup.Item>
-            <ListGroup.Item>Price :{product.price}</ListGroup.Item>
+            <ListGroup.Item>Price :${product.price}</ListGroup.Item>
             <ListGroup.Item>
               Description :<p>{product.description}</p>
             </ListGroup.Item>
@@ -88,7 +98,7 @@ const ProductScreen = () => {
                 <ListGroupItem>
                   <Row>
                     <Col>Price:</Col>
-                    <Col>{product.price}</Col>
+                    <Col>${product.price}</Col>
                   </Row>
                 </ListGroupItem>
                 <ListGroupItem>
@@ -106,7 +116,9 @@ const ProductScreen = () => {
                 {product.countInStock > 0 && (
                   <ListGroup.Item>
                     <div className='d-grid'>
-                      <Button variant='primary'>Add to Cart</Button>
+                      <Button onClick={addToCartHandler} variant='primary'>
+                        Add to Cart
+                      </Button>
                     </div>
                   </ListGroup.Item>
                 )}
