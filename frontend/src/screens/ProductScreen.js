@@ -69,6 +69,7 @@ const ProductScreen = () => {
       type: 'CART_ADD_ITEM',
       payload: { ...product, quantity },
     })
+    //redirect to cart screen after adding the item
     navigate(`/cart`)
   }
 
