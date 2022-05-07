@@ -5,6 +5,8 @@ import HomeScreen from './screens/HomeScreen'
 import ProductScreen from './screens/ProductScreen'
 import SigninScreen from './screens/SigninScreen'
 import CartScreen from './screens/CartScreen'
+import ShippingAddressScreen from './screens/ShippingAddressScreen'
+
 import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
 import { LinkContainer } from 'react-router-bootstrap'
@@ -19,6 +21,7 @@ function App() {
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' })
     localStorage.removeItem('userInfo')
+    localStorage.removeItem('shippingAddress')
   }
   return (
     <BrowserRouter>
@@ -71,6 +74,10 @@ function App() {
               <Route path='/product/:slug' element={<ProductScreen />} />
               <Route path='/cart' element={<CartScreen />} />
               <Route path='/signin' element={<SigninScreen />} />
+              <Route
+                path='/shipping'
+                element={<ShippingAddressScreen />}
+              ></Route>
               <Route path='/' element={<HomeScreen />} />
             </Routes>
           </Container>

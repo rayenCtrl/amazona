@@ -18,7 +18,7 @@ mongoose
 
 const app = express()
 //form data in the post req will be parsed as a json object in side req.body
-app.use(express.json())
+app.use(express.json()) //  convert the data to json
 app.use(express.urlencoded({ extended: true }))
 app.use('/api/seed', seedRouter)
 app.use('/api/products', productRouter)

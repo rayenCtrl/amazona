@@ -28,14 +28,15 @@ const SigninScreen = () => {
         password,
       })
       ctxDispatch({ type: 'USER_SIGNIN', payload: data })
-      localStorage.setItem('userInfo', JSON.stringify(data))
-      navigate(redirect || '/')
+      localStorage.setItem('userInfo', JSON.stringify(data)) // save the user info in the local storage
+      navigate(redirect || '/') // redirect to the home page or the page that we want to redirect to
     } catch (err) {
-      toast.error(getError(err))
+      toast.error(getError(err)) // show the error message COMING FROM THE BACKEND
     }
   }
 
   useEffect(() => {
+    // when the component is rendered we check if the user is already logged in and if so we redirect to the home page
     if (userInfo) {
       navigate(redirect)
     }
